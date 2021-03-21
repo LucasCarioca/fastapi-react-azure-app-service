@@ -1,0 +1,27 @@
+name: Terraform CI
+on:
+  pull_request:
+    branches: [ main ]
+    types: [ opened, synchronize, reopened, closed ]
+jobs:
+  ci:
+    name: 'Terraform CI'
+    runs-on: ubuntu-latest
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      TF_VAR_subscription_id: ${{ secrets.TF_VAR_subscription_id }}
+      TF_VAR_tenant_id: ${{ secrets.TF_VAR_tenant_id }}
+      TF_VAR_name: ${{ secrets.TF_VAR_name }}
+      TF_VAR_location: ${{ secrets.TF_VAR_location }}
+      TF_VAR_env: ${{ secrets.TF_VAR_env }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.14.7
+    - name: Terraform Validate
+      run: make terraform-validate
