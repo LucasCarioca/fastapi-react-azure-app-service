@@ -1,8 +1,5 @@
 .PHONY := all
 
-backend-start:
-	uvicorn backend.app.main:app --reload --port 8080
-
 terraform-validate:
 	cd terraform; \
 	terraform init; \
@@ -20,9 +17,8 @@ terraform-destroy:
 	terraform init; \
 	terraform destroy --auto-approve
 
-backend-build:
-	cd backend; \
-	./gradlew build
+backend-start:
+	uvicorn backend.app.main:app --reload --port 8080
 
 ui-build-nonprod:
 	cd ui; \
@@ -38,3 +34,8 @@ ui-ci:
 ui-test-watch:
 	cd ui; \
 	yarn test:watch 
+
+ui-start:
+	cd ui; \
+	yarn install; \
+	yarn start
